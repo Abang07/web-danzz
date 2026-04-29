@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danzz - Bot | Premium Store</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #ffffff;
+            --card: #f8fbff;
+            --text-p: #1a1a1a;
+            --text-s: #666666;
+            --primary: #007bff;
+            --accent: #6c5ce7;
+            --border: #d0e3ff;
+            --modal: #ffffff;
+            --pattern: rgba(0, 123, 255, 0.04);
+            --success: #2ecc71;
+            --btn-grad: linear-gradient(135deg, #007bff 0%, #6c5ce7 100%);
+            --shadow-primary: rgba(0, 123, 255, 0.3);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0a0b10;
+            --card: #151a21;
+            --text-p: #ffffff;
+            --text-s: #a0a0a0;
+            --primary: #3d94ff;
+            --accent: #a29bfe;
+            --border: #2a3441;
+            --modal: #11151c;
+            --pattern: rgba(255, 255, 255, 0.03);
+            --shadow-primary: rgba(61, 148, 255, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); scroll-behavior: smooth; }
+
+        body { background-color: var(--bg); color: var(--text-p); padding-bottom: 180px; overflow-x: hidden; position: relative; min-height: 100vh; }
+
+        .overlay-pattern {
+            position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            background-image: radial-gradient(var(--pattern) 2px, transparent 2px);
+            background-size: 30px 30px; opacity: 0.8;
+        }
+
+        nav {
+            padding: 18px 24px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); background: rgba(var(--bg), 0.7);
+        }
+
+        .status-header { display: flex; flex-direction: column; }
+        .time-text { font-weight: 800; font-size: 15px; color: var(--primary); }
+        .battery-text { font-size: 11px; font-weight: 700; color: var(--text-s); }
+
+        .container { padding: 0 20px; max-width: 480px; margin: auto; }
+
+        .hero { text-align: center; padding: 40px 20px 20px; }
+        .logo-img { width: 110px; height: 110px; border-radius: 40px; border: 4px solid var(--primary); box-shadow: 0 15px 35px var(--shadow-primary); margin-bottom: 15px; }
+        .brand-name { font-family: 'Fredoka', sans-serif; font-size: 38px; color: var(--primary); letter-spacing: -1px; }
+
+        .feature-box {
+            background: var(--btn-grad); border-radius: 30px; padding: 25px; color: #fff; margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(108, 92, 231, 0.25); position: relative; overflow: hidden;
+        }
+        .feature-box h2 { font-family: 'Fredoka', sans-serif; font-size: 24px; margin-bottom: 5px; }
+        .feature-box .limit-info { 
+            display: inline-block; background: rgba(255,255,255,0.2); padding: 4px 12px; 
+            border-radius: 10px; font-size: 11px; font-weight: 800; margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .feat-item { background: rgba(255,255,255,0.12); padding: 12px; border-radius: 18px; font-size: 12px; font-weight: 800; text-align: center; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        .feat-full { grid-column: span 2; }
+
+        .price-list-header {
+            text-align: center; margin: 25px 0; padding: 15px;
+            border: 2px solid var(--border); border-radius: 20px;
+            background: var(--card);
+        }
+        .price-list-header h2 { font-family: 'Fredoka', sans-serif; font-size: 24px; color: var(--primary); text-transform: uppercase; letter-spacing: 3px; }
+
+        .section-title { font-size: 13px; font-weight: 800; color: var(--primary); margin: 30px 0 18px; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; gap: 10px; }
+        .section-title::after { content: ''; flex: 1; height: 1.5px; background: linear-gradient(to right, var(--border), transparent); }
+
+        .card { 
+            background: var(--card); border: 1px solid var(--border); border-radius: 28px; padding: 22px; margin-bottom: 15px; 
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .card .price { font-size: 19px; font-weight: 800; color: var(--primary); }
+        .card .desc { font-size: 11px; color: var(--text-s); font-weight: 600; margin-top: 2px; }
+
+        .btn-add { 
+            background: var(--btn-grad); color: #fff; border: none; padding: 14px 24px; border-radius: 20px; 
+            font-weight: 800; cursor: pointer; font-size: 13px; box-shadow: 0 10px 20px var(--shadow-primary);
+        }
+
+        .link-box {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 25px; padding: 16px; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit;
+        }
+        .icon-wrap { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: var(--bg); border-radius: 18px; font-size: 22px; }
+
+        .store-menu-container {
+            position: fixed; bottom: 0; left: 0; right: 0; background: var(--modal);
+            border-top: 1px solid var(--border); padding: 10px 25px 30px; display: flex;
+            justify-content: space-around; z-index: 1001; backdrop-filter: blur(15px);
+        }
+        .menu-item { text-align: center; color: var(--text-s); cursor: pointer; text-decoration: none; }
+        .menu-item.active { color: var(--primary); }
+        .menu-item span { display: block; font-size: 20px; margin-bottom: 4px; }
+        .menu-item p { font-size: 10px; font-weight: 800; text-transform: uppercase; }
+
+        .total-floating {
+            position: fixed; bottom: 85px; left: 20px; right: 20px;
+            background: var(--primary); color: #fff; padding: 15px 25px;
+            border-radius: 25px; display: flex; justify-content: space-between;
+            align-items: center; box-shadow: 0 10px 30px var(--shadow-primary); z-index: 1000;
+        }
+
+        .footer-copyright {
+            text-align: center; padding: 20px 0 100px;
+            font-family: 'Fredoka', sans-serif; font-size: 18px; color: var(--primary);
+            font-weight: 600; opacity: 0.8;
+        }
+
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 25px; backdrop-filter: blur(15px); }
+        .modal-box { background: var(--modal); padding: 35px; border-radius: 40px; width: 100%; max-width: 400px; border: 1px solid var(--border); text-align: center; }
+        .btn-pay { width: 100%; padding: 18px; border-radius: 22px; border: none; margin-bottom: 12px; font-weight: 800; cursor: pointer; color: #fff; font-size: 15px; }
+        .btn-back-link { display: inline-block; margin-top: 18px; color: var(--text-s); font-size: 14px; font-weight: 700; cursor: pointer; }
+    </style>
+</head>
+<body id="home">
+
+    <div class="overlay-pattern"></div>
+
+    <nav>
+        <div class="status-header">
+            <span id="real-time" class="time-text">00:00:00</span>
+            <span id="battery-status" class="battery-text">Baterai: --%</span>
+        </div>
+        <div style="display:flex; gap:20px; align-items:center;">
+            <span onclick="toggleTheme()" style="cursor:pointer; font-size:22px;">🌓</span>
+            <div onclick="openCart()" style="cursor:pointer; font-size:22px; position:relative;">🛒<span id="cart-count" style="position:absolute; top:-6px; right:-8px; background:var(--primary); color:#fff; font-size:10px; padding:3px 6px; border-radius:50%; font-weight:900;">0</span></div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <img src="https://a.top4top.io/p_37718sqg50.jpeg" class="logo-img">
+            <h1 class="brand-name">Danzz - Bot</h1>
+            <p style="color:var(--text-s); font-weight:800; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-top: 5px;">Solusi Otomatisasi Grup WhatsApp</p>
+        </div>
+
+        <div id="section-store">
+            <div class="feature-box">
+                <h2>1400+ Fitur Aktif! ✨</h2>
+                <div class="limit-info">🔒 LIMIT: 100 / NOMOR</div>
+                <p style="font-size: 12px; opacity: 0.9; margin-bottom: 15px;">Keunggulan Danzz Bot dibanding yang lain:</p>
+                <div class="feature-grid">
+                    <div class="feat-item">🎮 Game Update</div>
+                    <div class="feat-item">⚔️ RPG World</div>
+                    <div class="feat-item">⚡ Downloader</div>
+                    <div class="feat-item">🧠 AI Premium</div>
+                    <div class="feat-item feat-full">📂 Custom Store (Addlist/Dellist)</div>
+                </div>
+            </div>
+
+            <div class="price-list-header">
+                <h2>LIST HARGA SEWA</h2>
+            </div>
+
+            <span class="section-title">Katalog Produk (1 GC)</span>
+            <div id="product-list"></div>
+        </div>
+
+        <div id="section-sosmed">
+            <span class="section-title">Hubungi Kami</span>
+            <a href="https://wa.me/6283816944190" class="link-box">
+                <div class="icon-wrap">👑</div><div><h4 style="font-family:'Fredoka'">WhatsApp Owner</h4><p style="font-size:11px; color:var(--text-s)">Klik untuk konfirmasi bayar</p></div>
+            </a>
+            <a href="https://whatsapp.com/channel/0029Vb6bO6i1t90YOxRT8f29" class="link-box">
+                <div class="icon-wrap">📢</div><div><h4 style="font-family:'Fredoka'">Channel Update</h4><p style="font-size:11px; color:var(--text-s)">Testimoni & Info Terbaru</p></div>
+            </a>
+            <a href="https://chat.whatsapp.com/LCpetpwhhAj8dXxlReONBB" class="link-box">
+                <div class="icon-wrap">👥</div><div><h4 style="font-family:'Fredoka'">Grup Komunitas</h4><p style="font-size:11px; color:var(--text-s)">Diskusi sesama pengguna</p></div>
+            </a>
+            <a href="https://www.instagram.com/dannn.15_?igsh=MWVhOHZocnNnaXhmcg==" class="link-box">
+                <div class="icon-wrap">📸</div><div><h4 style="font-family:'Fredoka'">Instagram</h4><p style="font-size:11px; color:var(--text-s)">@dannn.15_</p></div>
+            </a>
+        </div>
+
+        <div class="footer-copyright">
+            © Danzz - Bot
+        </div>
+    </div>
+
+    <div class="total-floating" id="floating-bar" style="display: none;">
+        <div>
+            <p style="font-size: 9px; font-weight: 800; opacity: 0.8;">ESTIMASI TOTAL</p>
+            <h3 id="display-total" style="font-family: 'Fredoka'; font-size: 20px;">Rp 0</h3>
+        </div>
+        <button class="btn-add" style="background: #fff; color: var(--primary); padding: 10px 20px;" onclick="openCart()">ORDER</button>
+    </div>
+
+    <div class="store-menu-container">
+        <a href="#home" class="menu-item active" onclick="setActive(this)">
+            <span>🏪</span><p>Store</p>
+        </a>
+        <a href="#section-sosmed" class="menu-item" onclick="setActive(this)">
+            <span>🔗</span><p>Sosmed</p>
+        </a>
+        <a href="https://wa.me/6283816944190" class="menu-item">
+            <span>💬</span><p>Chat</p>
+        </a>
+    </div>
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-box">
+            <h2 style="font-family:'Fredoka'; color:var(--primary); margin-bottom:20px;">Keranjang Belanja 🛒</h2>
+            <div id="cart-items-list" style="margin-bottom:20px; max-height: 250px; overflow-y: auto;"></div>
+            <button class="btn-pay" style="background:var(--btn-grad);" onclick="showPay()">Lanjut Pembayaran</button>
+            <p onclick="closeCart()" class="btn-back-link">Tambah Paket Lain</p>
+        </div>
+    </div>
+
+    <div id="pay-modal" class="modal">
+        <div class="modal-box">
+            <h3 style="margin-bottom:25px; font-family:'Fredoka';">Pilih Pembayaran 💳</h3>
+            <button onclick="openQR()" class="btn-pay" style="background:#1a1a1a;">QRIS (All Payment)</button>
+            <button onclick="openEW('DANA')" class="btn-pay" style="background:#0086ff;">DANA</button>
+            <button onclick="openEW('GOPAY')" class="btn-pay" style="background:#00aa13;">GOPAY</button>
+            <button onclick="openEW('SHOPEEPAY')" class="btn-pay" style="background:#ee4d2d;">SHOPEEPAY</button>
+            <p onclick="document.getElementById('pay-modal').style.display='none'" class="btn-back-link">Kembali</p>
+        </div>
+    </div>
+
+    <div id="qris-modal" class="modal">
+        <div class="modal-box">
+            <h3 style="font-family:'Fredoka'; margin-bottom: 10px;">SCAN QRIS</h3>
+            <img id="qris-image" src="https://b.top4top.io/p_37718fpwj0.jpeg" style="width:100%; border-radius:25px; margin:15px 0; border:1px solid var(--border);">
+            <button class="btn-pay" style="background:var(--success);" onclick="finish('QRIS')">KONFIRMASI DI WHATSAPP</button>
+            <span class="btn-back-link" onclick="backToMethods('qris-modal')">← Ganti Metode</span>
+        </div>
+    </div>
+
+    <div id="ew-modal" class="modal">
+        <div class="modal-box">
+            <h3 id="ew-title" style="color:var(--primary); font-family:'Fredoka';"></h3>
+            <div style="background:var(--card); border: 2px dashed var(--primary); padding:25px; border-radius:30px; margin:20px 0;">
+                <p id="no-tujuan" style="font-size:24px; font-weight:800; color:var(--primary);">083816944190</p>
+                <p style="font-weight:700; font-size:12px; opacity:0.7;">A/N Kurniawan Hamdani</p>
+            </div>
+            <button class="btn-pay" style="background:var(--primary);" onclick="copyNumber(this)">SALIN NOMOR</button>
+            <button class="btn-pay" style="background:var(--success); margin-top:5px;" onclick="finish('Transfer')">KONFIRMASI DI WHATSAPP</button>
+            <span class="btn-back-link" onclick="backToMethods('ew-modal')">← Ganti Metode</span>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus() {
+            const now = new Date();
+            document.getElementById('real-time').innerText = now.toLocaleTimeString('id-ID');
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then(battery => {
+                    const level = Math.round(battery.level * 100);
+                    const charging = battery.charging ? ' ⚡' : '';
+                    document.getElementById('battery-status').innerHTML = `Baterai: ${level}%${charging}`;
+                });
+            }
+        }
+        setInterval(updateStatus, 1000);
+        updateStatus();
+
+        function setActive(el) {
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        const products = [
+            { id: 1, name: "Sewa 1 Bulan", price: 15000, desc: "Aktivasi Cepat (1 GC)" },
+            { id: 2, name: "Sewa 2 Bulan", price: 30000, desc: "Lebih Puas & Murah (1 GC)" },
+            { id: 3, name: "Sewa 3 Bulan", price: 45000, desc: "Paling Banyak Dibeli! (1 GC)" },
+            { id: 4, name: "Sewa PERMANEN", price: 85000, desc: "Hemat Seumur Hidup! (1 GC)" }
+        ];
+        let cart = [];
+
+        function render() {
+            const list = document.getElementById('product-list');
+            products.forEach(p => {
+                list.innerHTML += `<div class="card"><div><h3>${p.name}</h3><p class="price">Rp ${p.price.toLocaleString()}</p><p class="desc">${p.desc}</p></div><button class="btn-add" onclick="addToCart(${p.id})">BELI</button></div>`;
+            });
+        }
+
+        function addToCart(id) { 
+            cart.push(products.find(p => p.id === id)); 
+            update(); 
+            document.getElementById('floating-bar').style.display = 'flex';
+        }
+        
+        function update() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const total = cart.reduce((s, p) => s + p.price, 0);
+            document.getElementById('display-total').innerText = "Rp " + total.toLocaleString();
+            document.getElementById('cart-items-list').innerHTML = cart.map((p,i) => `<div style="display:flex; justify-content:space-between; margin-bottom:12px; background:var(--bg); padding:15px; border-radius:18px; border:1px solid var(--border); font-size:14px; font-weight:800;"><span>${p.name}</span><span onclick="cart.splice(${i},1);update()" style="color:#ff4757; cursor:pointer;">✕</span></div>`).join('');
+            if(cart.length === 0) document.getElementById('floating-bar').style.display = 'none';
+        }
+
+        function openCart() { document.getElementById('cart-modal').style.display='flex'; }
+        function closeCart() { document.getElementById('cart-modal').style.display='none'; }
+        function showPay() { if(!cart.length) return; closeCart(); document.getElementById('pay-modal').style.display='flex'; }
+        function backToMethods(id) { document.getElementById(id).style.display = 'none'; document.getElementById('pay-modal').style.display = 'flex'; }
+        function openQR() { document.getElementById('pay-modal').style.display='none'; document.getElementById('qris-modal').style.display='flex'; }
+        function openEW(m) { document.getElementById('pay-modal').style.display='none'; document.getElementById('ew-title').innerText = 'Bayar via ' + m; document.getElementById('ew-modal').style.display='flex'; }
+        function copyNumber(btn) { const num = document.getElementById('no-tujuan').innerText; navigator.clipboard.writeText(num); btn.innerHTML = "✅ TERSALIN"; setTimeout(() => btn.innerHTML = "SALIN NOMOR", 2000); }
+        function toggleTheme() { document.body.hasAttribute('data-theme') ? document.body.removeAttribute('data-theme') : document.body.setAttribute('data-theme', 'dark'); }
+        
+        function finish(m) {
+            const items = cart.map(p => p.name).join(', ');
+            const total = cart.reduce((s, p) => s + p.price, 0);
+            const text = `*ORDER DANZZ BOT*%0A%0A*Paket:* ${items}%0A*Total:* Rp ${total.toLocaleString()}%0A*Metode:* ${m}%0A%0A_Halo Danzz, saya sudah bayar. Mohon di proses ya!_`;
+            window.open(`https://wa.me/6283816944190?text=${text}`);
+        }
+
+        render();
+    </script>
+</body>
+</html>
+
+
